@@ -27,38 +27,6 @@ $ws->on('ready', function ($discord) use (&$voiceClient, $ws, $tidal, $loop, $co
 	///////////////////////////////////////
 	/// We will now listen for commands ///
 	///////////////////////////////////////
-	$ws->on('message', function ($message, $discord) use (&$voiceClient) {
-		if (is_null($voiceClient)) {
-			return;
-		}
-
-		if (preg_match('/<@(.+)> (.+)/', $message->content, $matches)) {
-			array_shift($matches); // Get rid of original message
-			$id = array_shift($matches);
-			$command = array_shift($matches);
-
-			if ($id != $discord->id) {
-				return;
-			}
-
-			echo "Command from {$message->author->username}: {$command}\r\n";
-
-			switch ($command) {
-				case 'next':
-					echo "Skipping to next song...\r\n";
-					$voiceClient->stop();
-					break;
-				case 'pause':
-					echo "Pausing song...\r\n";
-					$voiceClient->pause();
-					break;
-				case 'unpause':
-					echo "Unpausing song...\r\n";
-					$voiceClient->unpause();
-					break;
-			}
-		}
-	});
 
 	$tidal->connect(
 		$config['tidal']['username'],
@@ -175,6 +143,82 @@ $ws->on('ready', function ($discord) use (&$voiceClient, $ws, $tidal, $loop, $co
 		}, function ($e) {
 			echo "Error joining the voice channel.\r\n";
 			die(1);
+		});
+
+		$ws->on('message', function ($message, $discord) use (&$finalSongQueue, &$voiceClient, $tidal) {
+			if (is_null($voiceClient)) {
+				return;
+			}
+
+			if (preg_match('/<@(.+)> (.+) (.+)/', $message->content, $matches)) {
+				dump($matches);
+
+				array_shift($matches); // Remove the original message
+				$id = array_shift($matches);
+
+				$params = explode(' ', implode(' ', $matches));
+				$command = array_shift($params);
+
+				if ($id != $discord->id) {
+					return;
+				}
+
+				echo "Command from {$message->author->username}: {$command}\r\n";
+
+				switch ($command) {
+					case 'next':
+						echo "Skipping to next song...\r\n";
+						$voiceClient->stop();
+						break;
+					case 'pause':
+						echo "Pausing song...\r\n";
+						$voiceClient->pause();
+						break;
+					case 'unpause':
+						echo "Unpausing song...\r\n";
+						$voiceClient->unpause();
+						break;
+					///////////////////////////////////////////
+					case 'album':
+					case 'track':
+						$tidal->search([
+							'query' => implode(' ', $params),
+							'types' => $command.'s',
+							'limit' => ($command == 'track') ? 1 : 999,
+						])->then(function ($response) use (&$finalSongQueue) {
+							foreach ($response['albums'] as $album) {
+								$album->getTracks()->then(function ($tracks) use (&$finalSongQueue) {
+									foreach ($tracks as $track) {
+										$track->getStreamUrl()->then(function ($streamUrl) use (&$finalSongQueue, $track) {
+											echo "Added {$track->title} - {$track->artists[0]->name}\r\n";
+											$finalSongQueue[] = [
+												'track' => $track,
+												'url'   => $streamUrl->url,
+											];
+										}, function ($e) use ($track) {
+											echo "Error getting the stream URL from: {$track->title} - {$e->getMessage()}\r\n";
+										});
+									}
+								}, function ($e) use ($album) {
+									echo "Error getting the tracks from: {$album->title} - {$e->getMessage()}\r\n";
+								});
+							}
+
+							foreach ($response['tracks'] as $track) {
+								$track->getStreamUrl()->then(function ($streamUrl) use (&$finalSongQueue, $track) {
+									echo "Added {$track->title} - {$track->artists[0]->name}\r\n";
+									$finalSongQueue[] = [
+										'track' => $track,
+										'url'   => $streamUrl->url,
+									];
+								}, function ($e) use ($track) {
+									echo "Error getting the stream URL from: {$track->title} - {$e->getMessage()}\r\n";
+								});
+							}
+						});
+						break;
+				}
+			}
 		});
 	}, function ($e) {
 		echo "Error connecting to TIDAL: {$e->getMessage()}\r\n";
