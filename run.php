@@ -19,13 +19,51 @@ $discord = new Discord($config['token']);
 $ws      = new WebSocket($discord, $loop);
 $tidal   = new Tidal($loop);
 
-$ws->on('ready', function ($discord) use ($ws, $tidal, $loop, $config) {
+$voiceClient = null;
+
+$ws->on('ready', function ($discord) use (&$voiceClient, $ws, $tidal, $loop, $config) {
 	echo "Discord WebSocket is ready.\r\n";
+
+	///////////////////////////////////////
+	/// We will now listen for commands ///
+	///////////////////////////////////////
+	$ws->on('message', function ($message, $discord) use (&$voiceClient) {
+		if (is_null($voiceClient)) {
+			return;
+		}
+
+		if (preg_match('/<@(.+)> (.+)/', $message->content, $matches)) {
+			array_shift($matches); // Get rid of original message
+			$id = array_shift($matches);
+			$command = array_shift($matches);
+
+			if ($id != $discord->id) {
+				return;
+			}
+
+			echo "Command from {$message->author->username}: {$command}\r\n";
+
+			switch ($command) {
+				case 'next':
+					echo "Skipping to next song...\r\n";
+					$voiceClient->stop();
+					break;
+				case 'pause':
+					echo "Pausing song...\r\n";
+					$voiceClient->pause();
+					break;
+				case 'unpause':
+					echo "Unpausing song...\r\n";
+					$voiceClient->unpause();
+					break;
+			}
+		}
+	});
 
 	$tidal->connect(
 		$config['tidal']['username'],
 		$config['tidal']['password']
-	)->then(function ($tidal) use ($discord, $ws, $config, $loop) {
+	)->then(function ($tidal) use (&$voiceClient, $discord, $ws, $config, $loop) {
 		echo "Connected to TIDAL.\r\n";
 
 		$finalSongQueue = [];
@@ -35,7 +73,7 @@ $ws->on('ready', function ($discord) use ($ws, $tidal, $loop, $config) {
 		foreach ($jsonQueue['albums'] as $albumQuery) {
 			$tidal->search([
 				'query' => $albumQuery,
-				'types' => 'albums'
+				'types' => 'albums',
 			])->then(function ($response) use (&$finalSongQueue) {
 				$albums = $response['albums'];
 
@@ -44,7 +82,10 @@ $ws->on('ready', function ($discord) use ($ws, $tidal, $loop, $config) {
 						foreach ($tracks as $track) {
 							$track->getStreamUrl()->then(function ($streamUrl) use (&$finalSongQueue, $track) {
 								echo "Added {$track->title}\r\n";
-								$finalSongQueue[] = $streamUrl->url;
+								$finalSongQueue[] = [
+									'track' => $track,
+									'url'   => $streamUrl->url,
+								];
 							}, function ($e) use ($track) {
 								echo "Error getting the stream URL from: {$track->title} - {$e->getMessage()}\r\n";
 							});
@@ -55,6 +96,30 @@ $ws->on('ready', function ($discord) use ($ws, $tidal, $loop, $config) {
 				}
 			}, function ($e) use ($albumQuery) {
 				echo "Error searching the TIDAL servers for: {$albumQuery} - {$e->getMessage()}\r\n";
+			});
+		}
+
+		// Handle songs:
+		foreach ($jsonQueue['songs'] as $songQuery) {
+			$tidal->search([
+				'query' => $songQuery,
+				'types' => 'tracks',
+				'limit' => 1,
+			])->then(function ($response) use (&$finalSongQueue) {
+				$tracks = $response['tracks'];
+				$track = $tracks->first();
+
+				$track->getStreamUrl()->then(function ($streamUrl) use (&$finalSongQueue, $track) {
+					echo "Added {$track->title}\r\n";
+					$finalSongQueue[] = [
+						'track' => $track,
+						'url'   => $streamUrl->url,
+					];
+				}, function ($e) use ($track) {
+					echo "Error getting the stream URL from: {$track->title} - {$e->getMessage()}\r\n";
+				});
+			}, function ($e) use (&$songQuery) {
+				echo "Error searching the TIDAL servers for: {$songQuery} - {$e->getMessage()}\r\n";
 			});
 		}
 
@@ -72,19 +137,28 @@ $ws->on('ready', function ($discord) use ($ws, $tidal, $loop, $config) {
 			die(1);
 		}
 
-		$ws->joinVoiceChannel($channel)->then(function ($vc) use (&$finalSongQueue, $loop, $ws) {
+		$ws->joinVoiceChannel($channel)->then(function ($vc) use (&$voiceClient, &$finalSongQueue, $loop, $ws, $discord) {
 			echo "Joined the voice channel.\r\n";
 
-			$playSongFromQueue = function () use (&$playSongFromQueue, &$finalSongQueue, $loop, $ws, $vc) {
+			$voiceClient = $vc;
+
+			$playSongFromQueue = function () use (&$playSongFromQueue, &$finalSongQueue, $loop, $ws, $vc, $discord) {
 				if (count($finalSongQueue) < 1) {
 					$loop->addTimer(3, $playSongFromQueue);
 
 					return;
 				}
 
-				$url = array_shift($finalSongQueue);
-				$process = new Process("ffmpeg -i {$url} -f s16le -loglevel 0 -ar 48000 -ac 2 pipe:1");
+				$songData = array_shift($finalSongQueue);
+				$process = new Process("ffmpeg -i {$songData['url']} -f s16le -loglevel 0 -ar 48000 -ac 2 pipe:1");
 				$process->start($loop);
+
+				$track = $songData['track'];
+				$artist = $track->artists->first();
+
+				echo "Playing: {$track->title} - {$track->album->title} - {$artist->name}\r\n";
+
+				$discord->updatePresence($ws, "{$artist->name} - {$track->title}", false);
 
 				$vc->playRawStream($process->stdout)->then(function () use (&$playSongFromQueue) {
 					echo "Finished playing song.\r\n";

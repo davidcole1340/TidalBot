@@ -8,9 +8,8 @@
 		"username": "",
 		"password": "",
 		"queue": {
-			"albums": [
-				""
-			]
+			"albums": [],
+			"songs": []
 		},
 		"audioQuality": "HIGH"
 	}
