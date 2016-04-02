@@ -1,0 +1,17 @@
+{
+	"token": "",
+	"voice": {
+		"guildName": "",
+		"channelName": ""
+	},
+	"tidal": {
+		"username": "",
+		"password": "",
+		"queue": {
+			"albums": [
+				""
+			]
+		},
+		"audioQuality": "HIGH"
+	}
+}

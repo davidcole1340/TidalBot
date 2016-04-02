@@ -1,0 +1,15 @@
+{
+    "name": "david-cole/tidal-bot",
+    "authors": [
+        {
+            "name": "David Cole",
+            "email": "david@team-reflex.com"
+        }
+    ],
+    "require": {
+        "team-reflex/discord-php": "dev-bot-api",
+        "team-reflex/tidal-php": "dev-master",
+        "symfony/var-dumper": "^3.0"
+    },
+    "minimum-stability": "dev"
+}
