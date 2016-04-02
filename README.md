@@ -9,3 +9,7 @@ Plays music from TIDAL into a Discord channel.
 3. Clone this repository
 4. Copy `config.default.json` to `config.json` and put in your details
 5. Run `php run.php`
+
+### To-Do
+
+- Add a command for adding songs to the queue
