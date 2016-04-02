@@ -151,8 +151,6 @@ $ws->on('ready', function ($discord) use (&$voiceClient, $ws, $tidal, $loop, $co
 			}
 
 			if (preg_match('/<@(.+)> (.+) (.+)/', $message->content, $matches)) {
-				dump($matches);
-
 				array_shift($matches); // Remove the original message
 				$id = array_shift($matches);
 
