@@ -40,7 +40,7 @@ $ws->on('ready', function ($discord) use (&$voiceClient, $ws, $tidal, $loop, $co
 			if ($message->author->id == $discord->id) {
 				return;
 			}
-			
+
 			if (preg_match('/<@([0-9]+)> (.+)/', $message->content, $matches)) {
 				array_shift($matches); // Remove the original message
 
@@ -52,7 +52,6 @@ $ws->on('ready', function ($discord) use (&$voiceClient, $ws, $tidal, $loop, $co
 
 				if (array_shift($params) == 'join') {
 					foreach ($message->full_channel->guild->channels->getAll('type', 'voice') as $channel) {
-						dump($channel->members);
 						if (isset($channel->members[$message->author->id])) {
 							$instance = new Instance($discord, $ws, $channel, $message->full_channel, $tidal);
 							
