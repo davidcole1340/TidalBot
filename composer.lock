@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "15dbee6aa96b14aa6701b756c5616272",
-    "content-hash": "2ee282aac4f2e79c65176c5e8331c8fd",
+    "hash": "169ea2de8bad9230a2066a9340a9a460",
+    "content-hash": "b202f85a1e5d70f9bd38489df50cf868",
     "packages": [
         {
             "name": "TrafficCophp/ByteBuffer",
@@ -589,12 +589,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "cccdb83709e12be5e6a91de8ed2fa15241c98b90"
+                "reference": "721f1821abaf543ecfa816e3a8e69f80735a6a36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/cccdb83709e12be5e6a91de8ed2fa15241c98b90",
-                "reference": "cccdb83709e12be5e6a91de8ed2fa15241c98b90",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/721f1821abaf543ecfa816e3a8e69f80735a6a36",
+                "reference": "721f1821abaf543ecfa816e3a8e69f80735a6a36",
                 "shasum": ""
             },
             "require": {
@@ -636,7 +636,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "http://laravel.com",
-            "time": "2016-04-01 14:29:58"
+            "time": "2016-04-03 01:44:31"
         },
         {
             "name": "league/flysystem",
@@ -644,12 +644,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "e5d2baf1a626120f9fa4b72f368dc7c201fe3541"
+                "reference": "a8294fb7d939433abfaeb0fc1a34a278acfa5b39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/e5d2baf1a626120f9fa4b72f368dc7c201fe3541",
-                "reference": "e5d2baf1a626120f9fa4b72f368dc7c201fe3541",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/a8294fb7d939433abfaeb0fc1a34a278acfa5b39",
+                "reference": "a8294fb7d939433abfaeb0fc1a34a278acfa5b39",
                 "shasum": ""
             },
             "require": {
@@ -719,7 +719,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2016-03-31 19:52:47"
+            "time": "2016-04-04 14:52:20"
         },
         {
             "name": "ml/iri",
@@ -767,6 +767,84 @@
                 "url"
             ],
             "time": "2014-01-21 13:43:39"
+        },
+        {
+            "name": "monolog/monolog",
+            "version": "1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Seldaek/monolog.git",
+                "reference": "064b38c16790249488e7a8b987acf1c9d7383c09"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/064b38c16790249488e7a8b987acf1c9d7383c09",
+                "reference": "064b38c16790249488e7a8b987acf1c9d7383c09",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "psr/log": "~1.0"
+            },
+            "provide": {
+                "psr/log-implementation": "1.0.0"
+            },
+            "require-dev": {
+                "aws/aws-sdk-php": "^2.4.9",
+                "doctrine/couchdb": "~1.0@dev",
+                "graylog2/gelf-php": "~1.0",
+                "jakub-onderka/php-parallel-lint": "0.9",
+                "php-amqplib/php-amqplib": "~2.4",
+                "php-console/php-console": "^3.1.3",
+                "phpunit/phpunit": "~4.5",
+                "phpunit/phpunit-mock-objects": "2.3.0",
+                "raven/raven": "^0.13",
+                "ruflin/elastica": ">=0.90 <3.0",
+                "swiftmailer/swiftmailer": "~5.3"
+            },
+            "suggest": {
+                "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
+                "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
+                "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
+                "ext-mongo": "Allow sending log messages to a MongoDB server",
+                "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
+                "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
+                "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
+                "php-console/php-console": "Allow sending log messages to Google Chrome",
+                "raven/raven": "Allow sending log messages to a Sentry server",
+                "rollbar/rollbar": "Allow sending log messages to Rollbar",
+                "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Monolog\\": "src/Monolog"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                }
+            ],
+            "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
+            "homepage": "http://github.com/Seldaek/monolog",
+            "keywords": [
+                "log",
+                "logging",
+                "psr-3"
+            ],
+            "time": "2016-04-02 13:12:58"
         },
         {
             "name": "nesbot/carbon",
@@ -821,12 +899,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "c7e26a21ba357863de030f0b9e701c7d04593774"
+                "reference": "1115ffa06bad72d01735d91f51eb022db556e205"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/c7e26a21ba357863de030f0b9e701c7d04593774",
-                "reference": "c7e26a21ba357863de030f0b9e701c7d04593774",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/1115ffa06bad72d01735d91f51eb022db556e205",
+                "reference": "1115ffa06bad72d01735d91f51eb022db556e205",
                 "shasum": ""
             },
             "require": {
@@ -861,7 +939,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2016-03-18 20:34:03"
+            "time": "2016-04-03 05:47:09"
         },
         {
             "name": "predis/predis",
@@ -1012,6 +1090,53 @@
                 "response"
             ],
             "time": "2015-05-04 20:22:00"
+        },
+        {
+            "name": "psr/log",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "d8e60a5619fff77f9669da8997697443ef1a1d7e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/d8e60a5619fff77f9669da8997697443ef1a1d7e",
+                "reference": "d8e60a5619fff77f9669da8997697443ef1a1d7e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Log\\": "Psr/Log/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "homepage": "https://github.com/php-fig/log",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2016-01-06 21:40:42"
         },
         {
             "name": "ratchet/pawl",
@@ -1790,12 +1915,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamreflex/DiscordPHP.git",
-                "reference": "d426de16747a504434f861a80d0c1d7d48fb0897"
+                "reference": "f2d6044e4e5707b5b95bc4a4d89cf98dfe433481"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamreflex/DiscordPHP/zipball/d426de16747a504434f861a80d0c1d7d48fb0897",
-                "reference": "d426de16747a504434f861a80d0c1d7d48fb0897",
+                "url": "https://api.github.com/repos/teamreflex/DiscordPHP/zipball/f2d6044e4e5707b5b95bc4a4d89cf98dfe433481",
+                "reference": "f2d6044e4e5707b5b95bc4a4d89cf98dfe433481",
                 "shasum": ""
             },
             "require": {
@@ -1836,7 +1961,7 @@
                 }
             ],
             "description": "An unofficial API to interact with the voice and text service Discord.",
-            "time": "2016-04-02 01:06:15"
+            "time": "2016-04-05 05:09:11"
         },
         {
             "name": "team-reflex/tidal-php",
@@ -1844,12 +1969,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamreflex/TidalPHP.git",
-                "reference": "b8a6dbb52e3362f93930802aee6cc8353d31b015"
+                "reference": "5d4948c75ae483d4baf318d94ba338801ec50cfc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamreflex/TidalPHP/zipball/b8a6dbb52e3362f93930802aee6cc8353d31b015",
-                "reference": "b8a6dbb52e3362f93930802aee6cc8353d31b015",
+                "url": "https://api.github.com/repos/teamreflex/TidalPHP/zipball/5d4948c75ae483d4baf318d94ba338801ec50cfc",
+                "reference": "5d4948c75ae483d4baf318d94ba338801ec50cfc",
                 "shasum": ""
             },
             "require": {
@@ -1879,7 +2004,7 @@
                 }
             ],
             "description": "Unofficial API wrapper for the audio streaming service TIDAL.",
-            "time": "2016-04-02 04:42:10"
+            "time": "2016-04-02 09:05:55"
         }
     ],
     "packages-dev": [],
