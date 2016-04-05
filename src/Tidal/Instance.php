@@ -168,30 +168,53 @@ class Instance extends EventEmitter
 			/**
 			 * Adds a song to the queue.
 			 *
-			 * @usage @username song <song-name>
+			 * @usage {prefix} song <song-name>
 			 */
-			'song'  => [$this, 'lookupSong'],
+			'song'    => [$this, 'lookupSong'],
 
 			/**
 			 * Adds an album to the queue.
 			 *
-			 * @usage @username album <album-name>
+			 * @usage {prefix} album <album-name>
 			 */
-			'album' => [$this, 'lookupAlbum'],
+			'album'   => [$this, 'lookupAlbum'],
 
 			/**
 			 * Makes the bot leave the channel.
 			 *
-			 * @usage @username leave
+			 * @usage {prefix} leave
 			 */
-			'leave' => [$this, 'leaveVoice'],
+			'leave'   => [$this, 'leaveVoice'],
 
 			/**
 			 * Returns the current song queue.
 			 *
-			 * @usage @username queue
+			 * @usage {prefix} queue
 			 */
-			'queue' => [$this, 'getQueue'],
+			'queue'   => [$this, 'getQueue'],
+
+			/**
+			 * Pauses the current song.
+			 *
+			 * @usage {prefix} pause
+			 */
+			'pause'   => [$this->vc, 'pause'],
+
+			/**
+			 * Unpauses the current song.
+			 *
+			 * @usage {prefix} unpause
+			 */
+			'unpause' => [$this->vc, 'unpause'],
+
+			/**
+			 * Skips the current song.
+			 *
+			 * @usage {prefix} skip
+			 * @alias next
+			 */
+			'skip'    => [$this->vc, 'stop'],
+			'next'    => [$this->vc, 'stop'],
 		];
 
 		if (preg_match('/<@([0-9]+)> (.+)/', $message->content, $matches)) {
