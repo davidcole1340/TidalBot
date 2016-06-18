@@ -6,6 +6,7 @@ use Discord\Discord;
 use Discord\Helpers\Process;
 use Discord\Parts\Channel\Channel;
 use Discord\Parts\Channel\Message;
+use Discord\Parts\User\Game;
 use Discord\Voice\VoiceClient;
 use Discord\WebSockets\Event;
 use Discord\WebSockets\WebSocket;
@@ -109,6 +110,11 @@ class Instance extends EventEmitter
 				}
 
 				$track = $this->session['songQueue']->shift();
+				$this->discord->updatePresence(
+					$this->discord->factory(Game::class, [
+						'name' => $track->title.' - '.$track->artists->first()->name,
+					])
+				);
 
 				$track->getStreamURL()->then(function ($streamURL) use (&$tickQueue, $track) {
 					$params = [
