@@ -87,6 +87,7 @@ class Instance extends EventEmitter
 		$this->logger->pushHandler(new StreamHandler('php://stdout', Logger::INFO));
 
 		$this->session['songQueue'] = new \SplQueue();
+		$this->session['currentSong'] = null;
 
 		$this->session['currentSongQuery'] = [];
 		$this->session['currentSongQueryAuthor'] = null;
@@ -216,6 +217,15 @@ class Instance extends EventEmitter
 			 */
 			'skip'    => [$this->vc, 'stop'],
 			'next'    => [$this->vc, 'stop'],
+
+			/**
+			 * Gets the current playing song.
+			 *
+			 * @usage {prefix} current
+			 * @alias playing
+			 */
+			'current' => [$this, 'current'],
+			'playing' => [$this, 'current'],
 
 			/**
 			 * Shows the help guide.
@@ -419,5 +429,24 @@ class Instance extends EventEmitter
 		$reply .= "\r\nTo remove a song, run '<@{$this->discord->id}> remove <id>'.";
 
 		$message->reply($reply);
+	}
+
+	/**
+	 * Handles get current song commands.
+	 *
+	 * @param array   $params  Command paramaters.
+	 * @param Message $message The original message.
+	 *
+	 * @return void 
+	 */
+	public function current($params, Message $message)
+	{
+		if (is_null($this->session['currentSong'])) {
+			$message->reply('Not currently playing a song.');
+		}
+
+		$song = $this->session['currentSong'];
+
+		$message->reply("**Song:** {$song->title}\r\n**Album:** {$song->album->title}\r\n**Artist:** {$song->artists->first()->name}");
 	}
 }
