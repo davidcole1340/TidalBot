@@ -83,7 +83,7 @@ class Instance extends EventEmitter
         $this->voiceChannel = $voiceChannel;
         $this->textChannel = $textChannel;
         $this->tidal = $tidal;
-        $this->logger = new Logger("Instance-{$this->voiceChannel->name}");
+        $this->logger = new Logger("Instance-{$this->voiceChannel->guild->name}");
         $this->logger->pushHandler(new StreamHandler('php://stdout', Logger::INFO));
 
         $this->session['songQueue'] = new \SplQueue();
