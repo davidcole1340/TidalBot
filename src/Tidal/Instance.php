@@ -10,6 +10,7 @@ use Discord\Voice\VoiceClient;
 use Discord\WebSockets\Event;
 use Discord\WebSockets\WebSocket;
 use Evenement\EventEmitter;
+use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Tidal\Tidal;
 
@@ -82,6 +83,7 @@ class Instance extends EventEmitter
 		$this->textChannel = $textChannel;
 		$this->tidal = $tidal;
 		$this->logger = new Logger("Instance-{$this->voiceChannel->name}");
+		$this->logger->pushHandler(new StreamHandler('php://stdout', Logger::INFO));
 
 		$this->session['songQueue'] = new \SplQueue();
 
