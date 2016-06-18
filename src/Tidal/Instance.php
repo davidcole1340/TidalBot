@@ -26,13 +26,6 @@ class Instance extends EventEmitter
 	protected $discord;
 
 	/**
-	 * The WebSocket instance.
-	 *
-	 * @var WebSocket The WebSocket.
-	 */
-	protected $ws;
-
-	/**
 	 * The voice client.
 	 *
 	 * @var VoiceClient The voice client.
@@ -77,15 +70,14 @@ class Instance extends EventEmitter
 	/**
 	 * Constructs an instance.
 	 *
-	 * @param WebSocket $ws           The WebSocket instance.
+	 * @param Discord   $discord      The Discord instance.
 	 * @param Channel   $voiceChannel The channel the instance is allocated to.
 	 * @param Channel   $textChannel  The text channel that handles commands.
 	 * @param Tidal     $tidal        The TIDAL client instance.
 	 */
-	public function __construct(Discord $discord, WebSocket $ws, Channel $voiceChannel, Channel $textChannel, Tidal $tidal)
+	public function __construct(Discord $discord, Channel $voiceChannel, Channel $textChannel, Tidal $tidal)
 	{
 		$this->discord = $discord;
-		$this->ws = $ws;
 		$this->voiceChannel = $voiceChannel;
 		$this->textChannel = $textChannel;
 		$this->tidal = $tidal;
@@ -99,17 +91,17 @@ class Instance extends EventEmitter
 		$this->session['currentAlbumQuery'] = [];
 		$this->session['currentAlbumQueryAuthor'] = null;
 
-		$this->ws->joinVoiceChannel($voiceChannel)->then(function (VoiceClient $vc) {
+		$this->discord->joinVoiceChannel($voiceChannel, false, true, $this->logger)->then(function (VoiceClient $vc) {
 			$this->vc = $vc;
 
 			$this->logger->addInfo("Connected to voice channel.");
 			$this->textChannel->sendMessage("Connected! I am ready for comamnds.");
 
-			$this->ws->on(Event::MESSAGE_CREATE, [$this, 'handleMessage']);
+			$this->discord->on(Event::MESSAGE_CREATE, [$this, 'handleMessage']);
 
 			$tickQueue = function () use (&$tickQueue) {
 				if ($this->session['songQueue']->count() < 1) {
-					$this->ws->loop->addTimer(3, $tickQueue);
+					$this->discord->loop->addTimer(3, $tickQueue);
 
 					return;
 				}
@@ -128,7 +120,7 @@ class Instance extends EventEmitter
 					];
 
 					$process = new Process(implode(' ', $params));
-					$process->start($this->ws->loop);
+					$process->start($this->discord->loop);
 
 					$this->vc->playRawStream($process->stdout)->then(function () use (&$tickQueue) {
 						$this->logger->addInfo('Finished playing song.');
@@ -139,7 +131,8 @@ class Instance extends EventEmitter
 						$this->textChannel->sendMessage("There was an error while playing the track: {$e->getMessage()}");
 					});
 				}, function ($e) {
-
+					$this->logger->addInfo('Erorr getting the stream URL.', [$e->getMessage()]);
+					$this->textChannel->sendMessage("There was an error trying to get the stream URL of the track: {$e->getMessage()}");
 				});
 			};
 
@@ -215,6 +208,21 @@ class Instance extends EventEmitter
 			 */
 			'skip'    => [$this->vc, 'stop'],
 			'next'    => [$this->vc, 'stop'],
+
+			/**
+			 * Shows the help guide.
+			 *
+			 * @usage {prefix} help
+			 */
+			'help'    => function ($params, Message $message) use (&$handlers) {
+				$reply = "**Commands:**\r\n\r\n";
+
+				foreach ($handlers as $key => $handler) {
+					$reply .= "`@{$this->discord->username} {$key}`\r\n";
+				}
+
+				$message->reply($reply);
+			},
 		];
 
 		if (preg_match('/<@([0-9]+)> (.+)/', $message->content, $matches)) {
@@ -375,7 +383,7 @@ class Instance extends EventEmitter
 	 */
 	public function leaveVoice($params, Message $message)
 	{
-		$this->ws->removeListener(Event::MESSAGE_CREATE, [$this, 'handleMessage']);
+		$this->discord->removeListener(Event::MESSAGE_CREATE, [$this, 'handleMessage']);
 		$this->vc->close();
 
 		$this->textChannel->sendMessage('Bye!');

@@ -5,6 +5,7 @@ use Discord\Helpers\Collection;
 use Discord\Helpers\Process;
 use Discord\WebSockets\Event;
 use Discord\WebSockets\WebSocket;
+use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use React\EventLoop\Factory;
 use TidalBot\Instance;
@@ -18,25 +19,32 @@ if (is_null($config)) {
 	die(1);
 }
 
-$loop      = Factory::create();
-$discord   = new Discord($config['token']);
-$ws        = new WebSocket($discord, $loop);
-$tidal     = new Tidal($loop);
 $logger    = new Logger('TidalBot');
+$loop      = Factory::create();
+$discord   = new Discord([
+	'token' => $config['token'],
+	'loop' => $loop,
+	'logger' => $logger,
+	'loadAllMembers' => true,
+	'disabledEvents' => ['PRESENCE_UPDATE'],
+]);
+$tidal     = new Tidal($loop);
 $instances = new Collection();
+
+$logger->pushHandler(new StreamHandler('php://stdout', Logger::INFO));
 
 $voiceClient = null;
 
-$ws->on('ready', function ($discord) use (&$voiceClient, $ws, $tidal, $loop, $config, $logger, &$instances) {
+$discord->on('ready', function ($discord) use (&$voiceClient, $tidal, $loop, $config, $logger, &$instances) {
 	$logger->addInfo('Discord WebSocket is ready.');
 
 	$tidal->connect(
 		$config['tidal']['username'],
 		$config['tidal']['password']
-	)->then(function ($tidal) use (&$voiceClient, $discord, $ws, $config, $loop, $logger, &$instances) {
+	)->then(function ($tidal) use (&$voiceClient, $discord, $config, $loop, $logger, &$instances) {
 		$logger->addInfo('Connected to TIDAL.');
 
-		$ws->on('message', function ($message) use ($ws, $discord, $logger, &$instances, $tidal) {
+		$discord->on('message', function ($message) use($discord, $logger, &$instances, $tidal) {
 			if ($message->author->id == $discord->id) {
 				return;
 			}
@@ -49,11 +57,12 @@ $ws->on('ready', function ($discord) use (&$voiceClient, $ws, $tidal, $loop, $co
 				}
 
 				$params = explode(' ', array_shift($matches));
+				$command = array_shift($params);
 
-				if (array_shift($params) == 'join') {
-					foreach ($message->full_channel->guild->channels->getAll('type', 'voice') as $channel) {
+				if ($command == 'join') {
+					foreach ($message->channel->guild->channels->getAll('type', 'voice') as $channel) {
 						if (isset($channel->members[$message->author->id])) {
-							$instance = new Instance($discord, $ws, $channel, $message->full_channel, $tidal);
+							$instance = new Instance($discord, $channel, $message->channel, $tidal);
 							
 							$removeInstance = function () use ($channel, &$instances) {
 								unset($instances[$channel->id]);
@@ -69,6 +78,8 @@ $ws->on('ready', function ($discord) use (&$voiceClient, $ws, $tidal, $loop, $co
 					}
 
 					$message->reply('We weren\'t able to find a voice channel with you inside it. Please join and try again.');
+				} elseif ($command == 'invite') {
+					$message->reply($discord->application->getInviteURLAttribute(3148800));
 				}
 			}
 		});
