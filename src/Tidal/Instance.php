@@ -127,11 +127,13 @@ class Instance extends EventEmitter
                     $process = new Process(implode(' ', $params));
                     $process->start($this->discord->loop);
 
-                    $this->vc->playRawStream($process->stdout)->then(function () use (&$tickQueue) {
+                    $this->vc->playRawStream($process->stdout)->then(function () use (&$tickQueue, $process) {
+                        $process->terminate();
                         $this->logger->addInfo('Finished playing song.');
 
                         $tickQueue();
-                    }, function ($e) {
+                    }, function ($e) use ($process) {
+                        $process->terminate();
                         $this->logger->addInfo('Error playing track', [$e->getMessage()]);
                         $this->textChannel->sendMessage("There was an error while playing the track: {$e->getMessage()}");
                     });
