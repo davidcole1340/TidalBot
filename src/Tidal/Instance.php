@@ -99,7 +99,7 @@ class Instance extends EventEmitter
             $this->vc = $vc;
 
             $this->logger->addInfo("Connected to voice channel.");
-            $this->textChannel->sendMessage("Connected! I am ready for comamnds.");
+            $this->textChannel->sendMessage("Connected! I am ready for comamnds. For any help run `@{$this->discord->username} info`.");
 
             $this->discord->on(Event::MESSAGE_CREATE, [$this, 'handleMessage']);
 

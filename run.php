@@ -97,6 +97,7 @@ $discord->on('ready', function ($discord) use (&$voiceClient, $tidal, $loop, $co
 
                     $count = count($instances);
                     $reply .= "I am currently connected to {$count} channel(s)!\r\n";
+                    $reply .= "Run `@{$discord->username} help` for help.\r\n";
 
                     $message->channel->sendMessage($reply);
                 }
