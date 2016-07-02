@@ -1,10 +1,10 @@
 <?php include __DIR__.'/vendor/autoload.php';
 
 use Discord\Discord;
-use Discord\Helpers\Collection;
 use Discord\Helpers\Process;
 use Discord\WebSockets\Event;
 use Discord\WebSockets\WebSocket;
+use Illuminate\Support\Collection;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use React\EventLoop\Factory;
@@ -46,7 +46,7 @@ $discord->on('ready', function ($discord) use (&$voiceClient, $tidal, $loop, $co
     )->then(function ($tidal) use (&$voiceClient, $discord, $config, $loop, $logger, &$instances) {
         $logger->addInfo('Connected to TIDAL.');
 
-        $discord->on('message', function ($message) use($discord, $logger, &$instances, $tidal) {
+        $discord->on('message', function ($message) use ($discord, $logger, &$instances, $tidal, $config) {
             if ($message->author->id == $discord->id) {
                 return;
             }
@@ -100,6 +100,15 @@ $discord->on('ready', function ($discord) use (&$voiceClient, $tidal, $loop, $co
                     $reply .= "Run `@{$discord->username} help` for help.\r\n";
 
                     $message->channel->sendMessage($reply);
+                } elseif ($command = 'channels' && $message->author->id == $config['admin']) {
+                    $response = "```\r\n";
+
+                    foreach ($instances as $instance) {
+                        $response .= "{$instance->textChannel->id} {$instance->textChannel->name} - {$instance->textChannel->guild->id} {$instance->textChannel->guild->name}\r\n";
+                    }
+
+                    $response .= '```';
+                    $message->author->sendMessage($response);
                 }
             }
         });

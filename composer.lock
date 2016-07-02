@@ -454,23 +454,23 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "61b1d4986f0aeb9ce9fe133a7e089a361b864854"
+                "reference": "10a49d5e1b8729c5e05cbdbf475b38b7099eb35e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/61b1d4986f0aeb9ce9fe133a7e089a361b864854",
-                "reference": "61b1d4986f0aeb9ce9fe133a7e089a361b864854",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/10a49d5e1b8729c5e05cbdbf475b38b7099eb35e",
+                "reference": "10a49d5e1b8729c5e05cbdbf475b38b7099eb35e",
                 "shasum": ""
             },
             "require": {
-                "guzzlehttp/promises": "~1.0",
-                "guzzlehttp/psr7": "~1.1",
-                "php": ">=5.5.0"
+                "guzzlehttp/promises": "^1.0",
+                "guzzlehttp/psr7": "^1.3.1",
+                "php": ">=5.5"
             },
             "require-dev": {
                 "ext-curl": "*",
-                "phpunit/phpunit": "~4.0",
-                "psr/log": "~1.0"
+                "phpunit/phpunit": "^4.0",
+                "psr/log": "^1.0"
             },
             "type": "library",
             "extra": {
@@ -508,7 +508,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2016-06-17 17:47:21"
+            "time": "2016-07-01 23:54:08"
         },
         {
             "name": "guzzlehttp/promises",
@@ -567,12 +567,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "58828615f7bb87013ce6365e9b1baa08580c7fc8"
+                "reference": "7ddcd25eeaf9f51173c5b477c75b1230a1e02eaa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/58828615f7bb87013ce6365e9b1baa08580c7fc8",
-                "reference": "58828615f7bb87013ce6365e9b1baa08580c7fc8",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/7ddcd25eeaf9f51173c5b477c75b1230a1e02eaa",
+                "reference": "7ddcd25eeaf9f51173c5b477c75b1230a1e02eaa",
                 "shasum": ""
             },
             "require": {
@@ -617,7 +617,7 @@
                 "stream",
                 "uri"
             ],
-            "time": "2016-06-07 17:55:54"
+            "time": "2016-07-01 19:26:18"
         },
         {
             "name": "illuminate/contracts",
@@ -625,12 +625,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "cd7242d6973d88f9eb53f916f70a7bd73dbbf9fe"
+                "reference": "54ea029a3c512efc56a93c25e2b0b17102276af8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/cd7242d6973d88f9eb53f916f70a7bd73dbbf9fe",
-                "reference": "cd7242d6973d88f9eb53f916f70a7bd73dbbf9fe",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/54ea029a3c512efc56a93c25e2b0b17102276af8",
+                "reference": "54ea029a3c512efc56a93c25e2b0b17102276af8",
                 "shasum": ""
             },
             "require": {
@@ -659,7 +659,7 @@
             ],
             "description": "The Illuminate Contracts package.",
             "homepage": "http://laravel.com",
-            "time": "2016-06-14 16:33:36"
+            "time": "2016-06-30 14:17:23"
         },
         {
             "name": "illuminate/support",
@@ -667,12 +667,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "76d8ee8598f2fa430b5442795716919df286cb48"
+                "reference": "a7a713fcb950fd228b38075f538ea1bbcb9e4423"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/76d8ee8598f2fa430b5442795716919df286cb48",
-                "reference": "76d8ee8598f2fa430b5442795716919df286cb48",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/a7a713fcb950fd228b38075f538ea1bbcb9e4423",
+                "reference": "a7a713fcb950fd228b38075f538ea1bbcb9e4423",
                 "shasum": ""
             },
             "require": {
@@ -681,6 +681,9 @@
                 "illuminate/contracts": "5.4.*",
                 "paragonie/random_compat": "~1.4|~2.0",
                 "php": ">=5.6.4"
+            },
+            "replace": {
+                "tightenco/collect": "self.version"
             },
             "suggest": {
                 "illuminate/filesystem": "Required to use the composer class (5.2.*).",
@@ -714,7 +717,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "http://laravel.com",
-            "time": "2016-06-16 17:10:30"
+            "time": "2016-06-29 21:11:45"
         },
         {
             "name": "ml/iri",
@@ -1711,12 +1714,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "f9bc5072e11b2ad15ea55e0f4171cc870dc33a1d"
+                "reference": "8a6bdec191138e01c92ae026e5aacb7b3e66267d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/f9bc5072e11b2ad15ea55e0f4171cc870dc33a1d",
-                "reference": "f9bc5072e11b2ad15ea55e0f4171cc870dc33a1d",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/8a6bdec191138e01c92ae026e5aacb7b3e66267d",
+                "reference": "8a6bdec191138e01c92ae026e5aacb7b3e66267d",
                 "shasum": ""
             },
             "require": {
@@ -1762,7 +1765,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-06-07 08:38:42"
+            "time": "2016-06-29 14:58:48"
         },
         {
             "name": "symfony/translation",
@@ -1770,12 +1773,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "3e0cc2ea85e0df7e11d002d9199288215a483d6c"
+                "reference": "3c589e93013e2808758f61b02755afc113f3be44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/3e0cc2ea85e0df7e11d002d9199288215a483d6c",
-                "reference": "3e0cc2ea85e0df7e11d002d9199288215a483d6c",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/3c589e93013e2808758f61b02755afc113f3be44",
+                "reference": "3c589e93013e2808758f61b02755afc113f3be44",
                 "shasum": ""
             },
             "require": {
@@ -1826,7 +1829,7 @@
             ],
             "description": "Symfony Translation Component",
             "homepage": "https://symfony.com",
-            "time": "2016-06-14 20:35:45"
+            "time": "2016-06-29 05:43:10"
         },
         {
             "name": "symfony/var-dumper",
@@ -1834,12 +1837,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "64c842d6f254dd3f4327bd09b6ae574af3242bb6"
+                "reference": "f78f6e278113c8591f4ef8faf013be39df9cef0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/64c842d6f254dd3f4327bd09b6ae574af3242bb6",
-                "reference": "64c842d6f254dd3f4327bd09b6ae574af3242bb6",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/f78f6e278113c8591f4ef8faf013be39df9cef0f",
+                "reference": "f78f6e278113c8591f4ef8faf013be39df9cef0f",
                 "shasum": ""
             },
             "require": {
@@ -1889,7 +1892,7 @@
                 "debug",
                 "dump"
             ],
-            "time": "2016-05-25 08:18:05"
+            "time": "2016-06-29 05:43:32"
         },
         {
             "name": "team-reflex/discord-php",
@@ -1897,12 +1900,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamreflex/DiscordPHP.git",
-                "reference": "0486eb2c6c7bb8f707d656fe4a70d34b28057257"
+                "reference": "6f3cf5157f2430ee0304a77464ff7cec84702dfc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamreflex/DiscordPHP/zipball/0486eb2c6c7bb8f707d656fe4a70d34b28057257",
-                "reference": "0486eb2c6c7bb8f707d656fe4a70d34b28057257",
+                "url": "https://api.github.com/repos/teamreflex/DiscordPHP/zipball/6f3cf5157f2430ee0304a77464ff7cec84702dfc",
+                "reference": "6f3cf5157f2430ee0304a77464ff7cec84702dfc",
                 "shasum": ""
             },
             "require": {
@@ -1911,6 +1914,7 @@
                 "illuminate/support": "^4.0|^5.0",
                 "monolog/monolog": "^1.19",
                 "nesbot/carbon": "^1.18",
+                "php": "^5.6|^7.0",
                 "ratchet/pawl": "0.2.*",
                 "react/datagram": "1.1.*",
                 "react/partial": "^2.0",
@@ -1952,7 +1956,7 @@
                 }
             ],
             "description": "An unofficial API to interact with the voice and text service Discord.",
-            "time": "2016-06-18 10:10:39"
+            "time": "2016-06-25 09:42:32"
         },
         {
             "name": "team-reflex/tidal-php",

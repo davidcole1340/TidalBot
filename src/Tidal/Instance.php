@@ -46,7 +46,7 @@ class Instance extends EventEmitter
      *
      * @var Channel The channel.
      */
-    protected $textChannel;
+    public $textChannel;
 
     /**
      * The TIDAL client instance.
